@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10120f">
+  <meta name="description" content="Painel visual e guia de uso do framework Reversal Projects: perfis, pipeline e primeiros passos em engenharia reversa.">
+  <title>Reversal Projects — Guia visual</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10120f;
+      --panel: #171a16;
+      --panel-2: #1d211c;
+      --line: #2b3029;
+      --text: #f0f0e9;
+      --muted: #a0a69a;
+      --lime: #c4f26b;
+      --lime-dark: #202b14;
+      --orange: #f0a66c;
+      --blue: #8db9ef;
+      --red: #f18e82;
+      --radius: 18px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 28px; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 70% -15%, rgb(196 242 107 / 9%), transparent 36rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    button, input, select { font: inherit; }
+    button, a, select, input { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--lime);
+      outline-offset: 3px;
+    }
+
+    .shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 28px 18px;
+      border-right: 1px solid var(--line);
+      background: rgb(16 18 15 / 92%);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; padding: 0 8px; text-decoration: none; }
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--lime);
+      color: #14170e;
+      font-size: 19px;
+      font-weight: 900;
+    }
+    .brand-name { font-size: 14px; font-weight: 750; letter-spacing: -.02em; }
+    .brand-name small { display: block; color: var(--muted); font-size: 11px; font-weight: 500; letter-spacing: .04em; }
+    .nav-label { margin: 42px 10px 11px; color: #72796f; font-size: 10px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+    .nav { display: grid; gap: 5px; }
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .18s, color .18s;
+    }
+    .nav a:hover, .nav a.active { background: #20251d; color: var(--text); }
+    .nav a.active { border-color: #343c2c; }
+    .nav-icon { width: 18px; color: var(--lime); text-align: center; }
+    .sidebar-bottom { margin-top: auto; padding: 14px 12px; border: 1px solid var(--line); border-radius: 13px; background: var(--panel); }
+    .sidebar-bottom strong { display: block; font-size: 12px; }
+    .sidebar-bottom p { margin: 5px 0 10px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .sidebar-bottom a { color: var(--lime); font-size: 11px; text-decoration: none; }
+
+    main { width: min(1120px, 100%); margin: 0 auto; padding: 34px clamp(20px, 5vw, 64px) 72px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 56px; }
+    .breadcrumb { color: var(--muted); font-size: 12px; }
+    .breadcrumb span { color: var(--text); }
+    .version { padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 11px; }
+    .eyebrow { display: flex; align-items: center; gap: 8px; margin: 0 0 15px; color: var(--lime); font-size: 11px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow::before { width: 20px; height: 1px; background: var(--lime); content: ""; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 760px; margin-bottom: 17px; font-size: clamp(36px, 6vw, 64px); letter-spacing: -.065em; line-height: 1.02; }
+    h1 em { color: var(--lime); font-style: normal; }
+    .hero-copy { max-width: 650px; margin-bottom: 27px; color: #b4baae; font-size: 16px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 15px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .18s, background .18s, border-color .18s;
+    }
+    .button:hover { transform: translateY(-1px); border-color: #51594c; }
+    .button.primary { border-color: var(--lime); background: var(--lime); color: #15190f; }
+    .button.primary:hover { background: #d3ff86; }
+    .hero { position: relative; overflow: hidden; padding-bottom: 42px; }
+    .hero::after {
+      position: absolute;
+      z-index: -1;
+      top: -25px;
+      right: -9px;
+      color: rgb(196 242 107 / 6%);
+      content: "RE";
+      font-size: clamp(140px, 25vw, 280px);
+      font-weight: 900;
+      letter-spacing: -.11em;
+      line-height: 1;
+    }
+
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 11px; margin: 4px 0 74px; }
+    .metric { padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(145deg, #1a1e18, #141612); }
+    .metric strong { display: block; margin-bottom: 2px; font-size: 26px; letter-spacing: -.05em; }
+    .metric span { color: var(--muted); font-size: 11px; }
+    section { margin: 0 0 76px; scroll-margin-top: 26px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 21px; }
+    .section-heading h2 { margin: 0; font-size: clamp(25px, 4vw, 34px); letter-spacing: -.05em; line-height: 1.14; }
+    .section-heading p { max-width: 440px; margin: 0; color: var(--muted); font-size: 12px; }
+    .section-index { margin-bottom: 8px; color: var(--lime); font-size: 10px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+
+    .profile-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 11px; }
+    .profile-card {
+      min-height: 183px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      text-align: left;
+      cursor: pointer;
+      transition: transform .18s, border-color .18s, background .18s;
+    }
+    .profile-card:hover { transform: translateY(-3px); border-color: #525a49; }
+    .profile-card[aria-pressed="true"] { border-color: var(--lime); background: linear-gradient(145deg, #20271a, #171a16); box-shadow: inset 0 0 0 1px rgb(196 242 107 / 14%); }
+    .profile-icon { display: grid; width: 34px; height: 34px; margin-bottom: 13px; place-items: center; border-radius: 10px; background: #282e23; color: var(--lime); font-size: 16px; }
+    .profile-card strong { display: block; margin-bottom: 5px; font-size: 13px; }
+    .profile-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .selection-note { min-height: 46px; margin-top: 12px; padding: 11px 14px; border-left: 2px solid var(--lime); border-radius: 0 9px 9px 0; background: #171b14; color: #c1c8b9; font-size: 12px; }
+
+    .pipeline { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; }
+    .phase { position: relative; min-width: 0; }
+    .phase:not(:last-child)::after { position: absolute; top: 23px; right: -11px; z-index: 1; width: 13px; height: 1px; background: #59614d; content: ""; }
+    .phase details { height: 100%; }
+    .phase summary { min-height: 135px; padding: 14px 12px; border: 1px solid var(--line); border-radius: 13px; background: var(--panel); list-style: none; cursor: pointer; }
+    .phase summary::-webkit-details-marker { display: none; }
+    .phase details[open] summary { border-color: var(--lime); border-radius: 13px 13px 0 0; }
+    .phase-no { display: block; margin-bottom: 19px; color: var(--lime); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .phase summary strong { display: block; margin-bottom: 3px; font-size: 12px; line-height: 1.3; }
+    .phase summary small { color: var(--muted); font-size: 10px; }
+    .phase-body { height: calc(100% - 135px); padding: 12px; border: 1px solid var(--lime); border-top: 0; border-radius: 0 0 13px 13px; background: #191d16; color: #c3cabc; font-size: 11px; }
+    .phase-body p { margin: 0; }
+    .phase-body span { display: block; margin-top: 9px; color: var(--lime); font-size: 10px; }
+    .pipeline-hint { margin: 11px 0 0; color: var(--muted); font-size: 11px; }
+
+    .confidence-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .confidence-card { padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+    .confidence-card header { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+    .confidence-dot { width: 11px; height: 11px; border-radius: 50%; background: #8ad49d; box-shadow: 0 0 13px rgb(138 212 157 / 24%); }
+    .confidence-card.inferred .confidence-dot { background: #edc46f; }
+    .confidence-card.gap .confidence-dot { background: #ea8278; }
+    .confidence-card strong { font-size: 13px; }
+    .confidence-card p { min-height: 38px; margin-bottom: 10px; color: var(--muted); font-size: 11px; }
+    .confidence-card small { color: #d0d5c9; font-size: 10px; }
+    .principle { margin-top: 12px; padding: 12px 14px; border: 1px dashed #3c4534; border-radius: 11px; color: #c7ceb9; font-size: 11px; }
+
+    .guide-layout { display: grid; grid-template-columns: .85fr 1.15fr; gap: 13px; align-items: stretch; }
+    .guide-card { padding: 21px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+    .guide-card h3 { margin-bottom: 6px; font-size: 16px; letter-spacing: -.025em; }
+    .guide-card > p { margin-bottom: 17px; color: var(--muted); font-size: 11px; }
+    .steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+    .steps li { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start; color: #c7ccbf; font-size: 11px; }
+    .step-no { display: grid; width: 23px; height: 23px; place-items: center; border: 1px solid #48513d; border-radius: 8px; color: var(--lime); font: 10px ui-monospace, Consolas, monospace; }
+    .steps strong { display: block; margin-bottom: 1px; color: var(--text); font-size: 11px; }
+    .steps a { color: var(--lime); text-decoration: none; }
+    .command-form { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+    .field { display: grid; gap: 5px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: #c6ccbe; font-size: 10px; font-weight: 650; }
+    .field input, .field select { width: 100%; min-height: 38px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #10120f; color: var(--text); font-size: 11px; }
+    .field input::placeholder { color: #70776b; }
+    .command-preview { overflow-x: auto; margin: 12px 0 10px; padding: 12px; border: 1px solid #30372b; border-radius: 9px; background: #10120f; color: var(--lime); font: 10px/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .command-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .command-footer p { margin: 0; color: var(--muted); font-size: 10px; }
+    .command-footer .button { min-height: 35px; padding: 6px 11px; font-size: 10px; }
+    .toast { min-height: 18px; margin-top: 7px; color: var(--lime); font-size: 10px; }
+    .guardrails { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .guardrail { padding: 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .guardrail span { display: block; margin-bottom: 8px; color: var(--orange); font-size: 12px; }
+    .guardrail strong { display: block; margin-bottom: 4px; font-size: 11px; }
+    .guardrail p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .resource-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .resource-links a { padding: 8px 11px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); color: #d0d5c9; font-size: 10px; text-decoration: none; }
+    .resource-links a:hover { border-color: var(--lime); color: var(--lime); }
+    footer { display: flex; justify-content: space-between; gap: 20px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 200px minmax(0, 1fr); }
+      .profile-grid { grid-template-columns: repeat(2, 1fr); }
+      .pipeline { grid-template-columns: repeat(5, 144px); padding: 2px 2px 10px; overflow-x: auto; }
+      .phase:not(:last-child)::after { display: none; }
+    }
+    @media (max-width: 660px) {
+      .shell { display: block; }
+      .sidebar { position: relative; z-index: 2; width: 100%; height: auto; padding: 13px 16px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .brand-mark { width: 34px; height: 34px; }
+      .nav-label, .sidebar-bottom { display: none; }
+      .nav { display: flex; gap: 4px; margin-top: 11px; overflow-x: auto; scrollbar-width: none; }
+      .nav::-webkit-scrollbar { display: none; }
+      .nav a { flex: 0 0 auto; gap: 6px; padding: 7px 9px; font-size: 10px; }
+      .nav-icon { width: auto; }
+      main { padding: 22px 18px 48px; }
+      .topbar { margin-bottom: 39px; }
+      .hero { padding-bottom: 28px; }
+      .hero-copy { font-size: 14px; }
+      .metrics { grid-template-columns: repeat(2, 1fr); margin-bottom: 55px; }
+      .metric { padding: 13px; }
+      .metric strong { font-size: 23px; }
+      section { margin-bottom: 57px; }
+      .section-heading { display: block; }
+      .section-heading p { margin-top: 8px; }
+      .profile-grid { gap: 8px; }
+      .profile-card { min-height: 174px; padding: 13px; }
+      .confidence-grid, .guardrails { grid-template-columns: 1fr; }
+      .confidence-card p { min-height: auto; }
+      .guide-layout { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 5px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Navegação do guia">
+      <a class="brand" href="#inicio" aria-label="Reversal Projects, início">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span class="brand-name">Reversal Projects<small>GUIA DO FRAMEWORK</small></span>
+      </a>
+      <p class="nav-label">Explore</p>
+      <nav class="nav">
+        <a class="active" href="#inicio"><span class="nav-icon" aria-hidden="true">⌂</span>Visão geral</a>
+        <a href="#perfis"><span class="nav-icon" aria-hidden="true">◈</span>Escolha de perfil</a>
+        <a href="#pipeline"><span class="nav-icon" aria-hidden="true">◎</span>Pipeline</a>
+        <a href="#confianca"><span class="nav-icon" aria-hidden="true">◉</span>Evidências</a>
+        <a href="#primeiros-passos"><span class="nav-icon" aria-hidden="true">↗</span>Primeiros passos</a>
+        <a href="#recursos"><span class="nav-icon" aria-hidden="true">▤</span>Documentação</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <strong>Feito para investigar.</strong>
+        <p>Um fluxo claro para descobrir, documentar e reconstruir software com confiança.</p>
+        <a href="README.md">Abrir o README →</a>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="breadcrumb">Reversal Projects <span>/ Guia visual</span></div>
+        <div class="version">Framework · v0.4.0</div>
+      </div>
+
+      <header class="hero" id="inicio">
+        <p class="eyebrow">Engenharia reversa, com método</p>
+        <h1>Entenda o original.<br><em>Reconstrua com confiança.</em></h1>
+        <p class="hero-copy">Um guia visual para conduzir projetos de engenharia reversa: escolha um perfil, avance por fases verificáveis e transforme descobertas em especificações úteis.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#primeiros-passos">Começar um projeto <span aria-hidden="true">&nbsp;↗</span></a>
+          <a class="button" href="#pipeline">Explorar o pipeline <span aria-hidden="true">&nbsp;↓</span></a>
+        </div>
+      </header>
+
+      <div class="metrics" aria-label="Resumo do framework">
+        <div class="metric"><strong>05</strong><span>fases universais</span></div>
+        <div class="metric"><strong>04</strong><span>perfis especializados</span></div>
+        <div class="metric"><strong>03</strong><span>níveis de confiança</span></div>
+        <div class="metric"><strong>01</strong><span>fluxo documentado</span></div>
+      </div>
+
+      <section id="perfis">
+        <div class="section-heading">
+          <div><p class="section-index">01 — Direcione a análise</p><h2>Qual é o seu alvo?</h2></div>
+          <p>Selecione um perfil para entender o foco da investigação. A escolha também atualiza o exemplo de comando no guia.</p>
+        </div>
+        <div class="profile-grid" role="group" aria-label="Selecione o perfil do projeto">
+          <button class="profile-card" type="button" data-profile="legacy-system" aria-pressed="false">
+            <span class="profile-icon" aria-hidden="true">⌘</span>
+            <strong>Sistema legado</strong>
+            <p>Desktop, servidores, bancos de dados e código antigo a manter ou modernizar.</p>
+          </button>
+          <button class="profile-card" type="button" data-profile="game" aria-pressed="true">
+            <span class="profile-icon" aria-hidden="true">✳</span>
+            <strong>Jogo</strong>
+            <p>ROMs, jogos mobile e engines: mecânicas, assets, RNG e saves.</p>
+          </button>
+          <button class="profile-card" type="button" data-profile="app" aria-pressed="false">
+            <span class="profile-icon" aria-hidden="true">▣</span>
+            <strong>Aplicativo</strong>
+            <p>Apps mobile, desktop ou web: telas, APIs, dados e integrações.</p>
+          </button>
+          <button class="profile-card" type="button" data-profile="documentation" aria-pressed="false">
+            <span class="profile-icon" aria-hidden="true">≡</span>
+            <strong>Documentação</strong>
+            <p>Consolidar descobertas e convertê-las em documentação operacional.</p>
+          </button>
+        </div>
+        <div class="selection-note" id="profile-note" aria-live="polite">Jogo: investigue mecânicas, recursos e formatos de save; preserve o comportamento observável e teste a paridade.</div>
+      </section>
+
+      <section id="pipeline">
+        <div class="section-heading">
+          <div><p class="section-index">02 — Siga um caminho reproduzível</p><h2>Da triagem à validação.</h2></div>
+          <p>O mesmo núcleo de cinco fases orienta todos os perfis. Abra uma etapa para ver como aplicá-la.</p>
+        </div>
+        <div class="pipeline">
+          <div class="phase"><details>
+            <summary><span class="phase-no">FASE 00</span><strong>Triagem</strong><small>SCOUT · classificar</small></summary>
+            <div class="phase-body"><p>Identifique plataforma, linguagem, proteções e escopo antes de mergulhar nos detalhes.</p><span>Entrega: HANDOFF + perfil</span></div>
+          </details></div>
+          <div class="phase"><details>
+            <summary><span class="phase-no">FASE 01</span><strong>Extração</strong><small>ARCHAEOLOGIST · coletar</small></summary>
+            <div class="phase-body"><p>Extraia uma representação analisável, recursos e símbolos; inicie o registro de evidências.</p><span>Entrega: artefatos + ledger</span></div>
+          </details></div>
+          <div class="phase"><details>
+            <summary><span class="phase-no">FASE 02</span><strong>Interpretação</strong><small>DETECTIVE · entender</small></summary>
+            <div class="phase-body"><p>Investigue fluxo de dados, regras de negócio, arquitetura e dúvidas ainda abertas.</p><span>Entrega: docs + soul.md</span></div>
+          </details></div>
+          <div class="phase"><details>
+            <summary><span class="phase-no">FASE 03</span><strong>Estruturação</strong><small>SPECIFIER · especificar</small></summary>
+            <div class="phase-body"><p>Converta descobertas verificadas em contratos, especificações e testes de paridade.</p><span>Entrega: SDD + parity spec</span></div>
+          </details></div>
+          <div class="phase"><details>
+            <summary><span class="phase-no">FASE 04</span><strong>Validação</strong><small>RECONSTRUCTOR · provar</small></summary>
+            <div class="phase-body"><p>Compare a reconstrução com o original e documente desvios antes de concluir.</p><span>Entrega: paridade + fechamento</span></div>
+          </details></div>
+        </div>
+        <p class="pipeline-hint">Dica: clique numa fase para expandir. As fases especializadas do perfil complementam — não substituem — o pipeline universal.</p>
+      </section>
+
+      <section id="confianca">
+        <div class="section-heading">
+          <div><p class="section-index">03 — Torne a certeza visível</p><h2>Afirmações com evidência.</h2></div>
+          <p>Classifique cada descoberta. Sem prova, uma hipótese não deve parecer um fato.</p>
+        </div>
+        <div class="confidence-grid">
+          <article class="confidence-card">
+            <header><span class="confidence-dot" aria-hidden="true"></span><strong>Confirmado</strong></header>
+            <p>Verificado diretamente por teste, execução, bytes ou referência confiável.</p>
+            <small>Ex.: comportamento reproduzido e registrado.</small>
+          </article>
+          <article class="confidence-card inferred">
+            <header><span class="confidence-dot" aria-hidden="true"></span><strong>Inferido</strong></header>
+            <p>Hipótese sustentada por padrões observados, mas ainda sem prova definitiva.</p>
+            <small>Ex.: formato provável baseado em valores recorrentes.</small>
+          </article>
+          <article class="confidence-card gap">
+            <header><span class="confidence-dot" aria-hidden="true"></span><strong>Lacuna</strong></header>
+            <p>Informação desconhecida ou contraditória que precisa de investigação.</p>
+            <small>Ex.: função observada cujo propósito segue desconhecido.</small>
+          </article>
+        </div>
+        <div class="principle"><strong>Regra prática:</strong> comece como lacuna; promova uma hipótese a confirmada somente quando houver evidência que outra pessoa possa verificar.</div>
+      </section>
+
+      <section id="primeiros-passos">
+        <div class="section-heading">
+          <div><p class="section-index">04 — Saia do guia para o projeto</p><h2>Comece em poucos passos.</h2></div>
+          <p>Mantenha o original protegido, registre o contexto e retome o trabalho sem reler tudo.</p>
+        </div>
+        <div class="guide-layout">
+          <article class="guide-card">
+            <h3>O fluxo essencial</h3>
+            <p>Uma rotina curta, desde o arquivo de origem até a validação.</p>
+            <ol class="steps">
+              <li><span class="step-no">01</span><span><strong>Preserve o original</strong>Coloque a cópia de referência em <code>Software Origin/</code>; nunca edite esse arquivo.</span></li>
+              <li><span class="step-no">02</span><span><strong>Escolha o perfil</strong>Classifique o alvo na Fase 0 e abra o perfil correspondente.</span></li>
+              <li><span class="step-no">03</span><span><strong>Inicialize o projeto</strong>Use o formulário ao lado para gerar um comando PowerShell de exemplo.</span></li>
+              <li><span class="step-no">04</span><span><strong>Trabalhe e registre</strong>Atualize evidências, <code>HANDOFF.md</code> e estado ao avançar.</span></li>
+              <li><span class="step-no">05</span><span><strong>Valide a reconstrução</strong>Compare resultados com o original e anote a paridade observada.</span></li>
+            </ol>
+          </article>
+          <article class="guide-card">
+            <h3>Monte um comando de inicialização</h3>
+            <p>Preencha os campos para gerar um exemplo compatível com <code>New-REProject.ps1</code>.</p>
+            <div class="command-form">
+              <div class="field"><label for="project-name">Nome do projeto</label><input id="project-name" type="text" value="meu_jogo" autocomplete="off"></div>
+              <div class="field"><label for="project-profile">Perfil</label>
+                <select id="project-profile">
+                  <option value="legacy-system">Sistema legado</option>
+                  <option value="game" selected>Jogo</option>
+                  <option value="app">Aplicativo</option>
+                  <option value="documentation">Documentação</option>
+                </select>
+              </div>
+              <div class="field"><label for="project-platform">Plataforma</label><input id="project-platform" type="text" value="SNES" autocomplete="off"></div>
+              <div class="field"><label for="project-language">Linguagem (opcional)</label><input id="project-language" type="text" value="65816 ASM" autocomplete="off"></div>
+              <div class="field full"><label for="project-description">Descrição (opcional)</label><input id="project-description" type="text" value="Jogo clássico em análise" autocomplete="off"></div>
+            </div>
+            <pre class="command-preview" id="command-preview" aria-label="Comando PowerShell gerado"></pre>
+            <div class="command-footer"><p>Execute na raiz do workspace que contém <code>Reversal Projects/</code>.</p><button class="button" id="copy-command" type="button">Copiar comando</button></div>
+            <div class="toast" id="copy-status" role="status" aria-live="polite"></div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <div><p class="section-index">05 — Preserve o que importa</p><h2>Limites claros, resultados melhores.</h2></div>
+          <p>Esses cuidados mantêm o trabalho rastreável, reversível e coerente de ponta a ponta.</p>
+        </div>
+        <div class="guardrails">
+          <article class="guardrail"><span aria-hidden="true">◌</span><strong>Originais intocados</strong><p>A pasta <code>Software Origin/</code> é somente leitura. Faça análise no projeto decompilado.</p></article>
+          <article class="guardrail"><span aria-hidden="true">⌕</span><strong>Rastreabilidade</strong><p>Vincule conclusões técnicas a evidências e registre incertezas no evidence ledger.</p></article>
+          <article class="guardrail"><span aria-hidden="true">↻</span><strong>Paridade antes de concluir</strong><p>Teste o comportamento reconstruído em relação ao original e explique diferenças intencionais.</p></article>
+        </div>
+      </section>
+
+      <section id="recursos">
+        <div class="section-heading">
+          <div><p class="section-index">06 — Consulte as fontes</p><h2>Continue a investigação.</h2></div>
+          <p>O painel é um ponto de entrada visual; os documentos abaixo contêm os checklists e detalhes completos.</p>
+        </div>
+        <div class="resource-links">
+          <a href="README.md">README · visão geral</a>
+          <a href="docs/guides/QUICKSTART.md">Quickstart · fluxo de projeto</a>
+          <a href="core/PIPELINE.md">Pipeline · fases e checklists</a>
+          <a href="core/CONFIDENCE.md">Confiança · critérios e métricas</a>
+          <a href="core/RULES.md">Regras universais</a>
+          <a href="scripts/New-REProject.ps1">Script de inicialização</a>
+          <a href="profiles/legacy-system/PROFILE.md">Perfil · legado</a>
+          <a href="profiles/game/PROFILE.md">Perfil · jogo</a>
+          <a href="profiles/app/PROFILE.md">Perfil · aplicativo</a>
+          <a href="profiles/documentation/PROFILE.md">Perfil · documentação</a>
+        </div>
+      </section>
+
+      <footer><span>Reversal Projects · Guia visual local</span><span>Um HTML só. Sem bibliotecas, fontes ou chamadas externas.</span></footer>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const profileInfo = {
+        "legacy-system": {
+          note: "Sistema legado: investigue lógica de negócio, persistência e desobfuscação para orientar a manutenção ou modernização.",
+          platform: "Win32",
+          language: "VB.NET",
+          description: "Sistema legado em análise"
+        },
+        game: {
+          note: "Jogo: investigue mecânicas, recursos e formatos de save; preserve o comportamento observável e teste a paridade.",
+          platform: "SNES",
+          language: "65816 ASM",
+          description: "Jogo clássico em análise"
+        },
+        app: {
+          note: "Aplicativo: documente navegação, contratos de API e dados locais; valide fluxos e integrações.",
+          platform: "Android",
+          language: "Java/Kotlin",
+          description: "Aplicativo em análise"
+        },
+        documentation: {
+          note: "Documentação: inventarie as fontes, consolide as descobertas e valide se outra pessoa consegue usá-las.",
+          platform: "Multiplataforma",
+          language: "A identificar",
+          description: "Consolidação de documentação"
+        }
+      };
+
+      const profileButtons = [...document.querySelectorAll(".profile-card")];
+      const profileSelect = document.querySelector("#project-profile");
+      const nameInput = document.querySelector("#project-name");
+      const platformInput = document.querySelector("#project-platform");
+      const languageInput = document.querySelector("#project-language");
+      const descriptionInput = document.querySelector("#project-description");
+      const commandPreview = document.querySelector("#command-preview");
+      const escapePowerShell = value => value.replace(/'/g, "''");
+
+      function updateCommand() {
+        const args = [
+          `-Name '${escapePowerShell(nameInput.value.trim() || "meu_projeto")}'`,
+          `-Profile '${profileSelect.value}'`,
+          `-Platform '${escapePowerShell(platformInput.value.trim() || "A identificar")}'`
+        ];
+        if (languageInput.value.trim()) args.push(`-Language '${escapePowerShell(languageInput.value.trim())}'`);
+        if (descriptionInput.value.trim()) args.push(`-Description '${escapePowerShell(descriptionInput.value.trim())}'`);
+        commandPreview.textContent = `.\\scripts\\New-REProject.ps1 ${args.join(" ")}`;
+      }
+
+      function selectProfile(profile, updateFields) {
+        profileButtons.forEach(button => {
+          button.setAttribute("aria-pressed", String(button.dataset.profile === profile));
+        });
+        profileSelect.value = profile;
+        document.querySelector("#profile-note").textContent = profileInfo[profile].note;
+        if (updateFields) {
+          platformInput.value = profileInfo[profile].platform;
+          languageInput.value = profileInfo[profile].language;
+          descriptionInput.value = profileInfo[profile].description;
+        }
+        updateCommand();
+      }
+
+      profileButtons.forEach(button => button.addEventListener("click", () => selectProfile(button.dataset.profile, true)));
+      profileSelect.addEventListener("change", () => selectProfile(profileSelect.value, true));
+      [nameInput, platformInput, languageInput, descriptionInput].forEach(input => input.addEventListener("input", updateCommand));
+
+      document.querySelector("#copy-command").addEventListener("click", async () => {
+        const status = document.querySelector("#copy-status");
+        try {
+          await navigator.clipboard.writeText(commandPreview.textContent);
+          status.textContent = "Comando copiado para a área de transferência.";
+        } catch {
+          status.textContent = "Não foi possível copiar automaticamente. Selecione e copie o comando acima.";
+        }
+      });
+
+      const navLinks = [...document.querySelectorAll(".nav a")];
+      const sections = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => {
+          const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+          navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${visible.target.id}`));
+        }, { rootMargin: "-15% 0px -70% 0px", threshold: [0, 0.1, 0.4] });
+        sections.forEach(section => observer.observe(section));
+      }
+
+      updateCommand();
+    })();
+  </script>
+</body>
+</html>
