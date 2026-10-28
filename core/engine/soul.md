@@ -8,9 +8,9 @@
 ## 1. O que é a "Alma" (Soul) de um Software?
 
 Todo software que sobreviveu ao tempo possui um núcleo de valor que o tornou único para seus usuários:
-- No `cm14`, é a precisão e emoção matemática das 50 temporadas históricas de Fórmula 1 e sua simulação de corrida corrida-a-corrida.
-- No `rfm2013` ou `brasfoot`, é a agilidade do loop de transferências, o balanceamento de atributos e a simulação de partidas instantânea.
-- No `amt_mp3player`, é a estabilidade do protocolo de comunicação de baixo nível com o dispositivo físico.
+- Em um simulador de corrida ou esporte, é o balanceamento estatístico, a agilidade do loop de simulação e a precisão matemática do motor de eventos.
+- Em um aplicativo companheiro de hardware, é a confiabilidade e tolerância a falhas do protocolo de comunicação de baixo nível.
+- Em um sistema ERP/contábil legado, são os cálculos fiscais consolidados e a integridade transacional de décadas.
 
 Muitas vezes, desenvolvedores perdem meses tentando reescrever código legado e acabam destruindo o feeling original porque recriaram a parte errada.
 

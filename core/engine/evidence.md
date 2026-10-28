@@ -49,7 +49,7 @@ Quando o objetivo é recriar, modernizar ou portar um componente sem alterar a l
 ```
 
 1. **Paridade Bit-Exact (Nível Matemático/Cripto/Parsers):**
-   - A saída do código reconstruído deve ser **idêntica byte a byte** ou bit a bit à saída do legado (ex: RNG de `cm14`, decodificador de save de `toloveru`).
+   - A saída do código reconstruído deve ser **idêntica byte a byte** ou bit a bit à saída do legado (ex: rotinas de RNG determinístico, decodificadores de save em binário).
 2. **Paridade Behavior-Exact (Nível UI/Simulação/Fluxos):**
    - O comportamento observável, estados de máquina e contratos de transição devem coincidir rigorosamente, mesmo que a stack interna seja moderna.
 
