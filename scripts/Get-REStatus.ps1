@@ -3,11 +3,11 @@
     Mostra o status de todos os projetos *_decompiled/ no workspace.
 
 .DESCRIPTION
-    Lê o state.json de cada projeto (se existir) e exibe um dashboard
-    consolidado com fase, progresso e métricas de confiança.
+    Le o state.json de cada projeto (se existir) e exibe um dashboard
+    consolidado com fase, progresso e metricas de confianca.
 
 .PARAMETER Workspace
-    Caminho do workspace. Padrão: diretório pai do framework.
+    Caminho do workspace. Padrao: diretorio pai do framework.
 
 .EXAMPLE
     .\Get-REStatus.ps1
@@ -24,18 +24,18 @@ if ($projects.Count -eq 0) {
     return
 }
 
-$phaseEmoji = @{
-    "triage"         = "🔍"
-    "extraction"     = "⛏️"
-    "interpretation" = "🧩"
-    "structuring"    = "📐"
-    "validation"     = "✅"
+$phaseTags = @{
+    "triage"         = "[TRIAGE]"
+    "extraction"     = "[EXTRACT]"
+    "interpretation" = "[INTERPRET]"
+    "structuring"    = "[STRUCTURE]"
+    "validation"     = "[VALIDATE]"
 }
 
 Write-Host ""
-Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "  REVERSAL PROJECTS — Dashboard de Projetos" -ForegroundColor Cyan
-Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "===============================================================" -ForegroundColor Cyan
+Write-Host "  REVERSAL PROJECTS -- Dashboard de Projetos" -ForegroundColor Cyan
+Write-Host "===============================================================" -ForegroundColor Cyan
 Write-Host ""
 
 $table = @()
@@ -49,9 +49,9 @@ foreach ($proj in $projects) {
 
     if ($hasState) {
         try {
-            $state = Get-Content $statePath -Raw | ConvertFrom-Json
+            $state = Get-Content $statePath -Raw -Encoding UTF8 | ConvertFrom-Json
             $phase = $state.phase
-            $emoji = if ($phaseEmoji.ContainsKey($phase)) { $phaseEmoji[$phase] } else { "❓" }
+            $tag = if ($phaseTags.ContainsKey($phase)) { $phaseTags[$phase] } else { "[?]" }
             $progress = [math]::Round($state.phase_progress * 100)
             $conf = $state.confidence
             $total = $conf.confirmed + $conf.inferred + $conf.gap
@@ -60,17 +60,17 @@ foreach ($proj in $projects) {
             $table += [PSCustomObject]@{
                 Projeto    = $proj.Name -replace '_decompiled$', ''
                 Perfil     = $state.profile
-                Fase       = "$emoji $phase"
+                Fase       = "$tag $phase"
                 Progresso  = "${progress}%"
-                Confianca  = "🟢$($conf.confirmed) 🟡$($conf.inferred) 🔴$($conf.gap)"
+                Confianca  = "CONF:$($conf.confirmed) INF:$($conf.inferred) GAP:$($conf.gap)"
                 Cobertura  = "${coverage}%"
                 Checkpoint = if ($state.last_checkpoint) { $state.last_checkpoint.Substring(0, 10) } else { "-" }
             }
         } catch {
             $table += [PSCustomObject]@{
                 Projeto    = $proj.Name -replace '_decompiled$', ''
-                Perfil     = "⚠️ erro"
-                Fase       = "state.json inválido"
+                Perfil     = "erro"
+                Fase       = "state.json invalido"
                 Progresso  = "-"
                 Confianca  = "-"
                 Cobertura  = "-"
@@ -78,7 +78,7 @@ foreach ($proj in $projects) {
             }
         }
     } else {
-        $status = if ($hasHandoff) { "📄 só HANDOFF" } else { "⚠️ sem tracking" }
+        $status = if ($hasHandoff) { "so HANDOFF" } else { "sem tracking" }
         $table += [PSCustomObject]@{
             Projeto    = $proj.Name -replace '_decompiled$', ''
             Perfil     = "-"
@@ -93,5 +93,5 @@ foreach ($proj in $projects) {
 
 $table | Format-Table -AutoSize
 
-Write-Host "Total: $($projects.Count) projetos" -ForegroundColor DarkGray
+Write-Host "Total: $($projects.Count) projetos encontrados." -ForegroundColor DarkGray
 Write-Host ""
