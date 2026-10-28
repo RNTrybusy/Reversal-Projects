@@ -15,9 +15,9 @@ Incorpora diretamente no seu núcleo as maiores forças do **REA Framework** (ri
 | Caminho | Papel |
 |---|---|
 | `core/` | Pipeline universal (5 fases), regras universais, escala de confiança |
-| `core/engine/` | Motores destilados: `evidence.md`, `roles.md`, `synthesis.md`, `soul.md` |
+| `core/engine/` | Motores destilados: `evidence.md`, `roles.md`, `synthesis.md`, `soul.md`, `security.md` |
 | `profiles/` | Perfis especializados: `legacy-system`, `game`, `app`, `documentation` |
-| `templates/` | Templates: HANDOFF, state, evidence ledger, parity spec, retro ADR, SDD, soul |
+| `templates/` | Templates: HANDOFF, state, evidence ledger, parity spec, retro ADR, SDD, soul, security audit |
 | `scripts/` | Utilitários PowerShell (`New-REProject`, `Get-REStatus`, `Update-REState`, `Get-RESummary`) |
 | `docs/` | Guias de uso, quickstarts e comparações de arquitetura |
 
@@ -29,10 +29,10 @@ Incorpora diretamente no seu núcleo as maiores forças do **REA Framework** (ri
 5. Antes de codificar um novo produto, seu `soul.md` deve estar preenchido.
 
 ## Estado Atual
-- **v0.3.0 — Motores REA e Reversa Destilados no Núcleo**
-  - `core/engine/evidence.md`: Evidence Ledger, Unknowns Tracker e Parity Harness (REA).
-  - `core/engine/roles.md`: 6 posturas cognitivas para prompts de IA (Reversa).
-  - `core/engine/synthesis.md`: 4 estratégias de migração e matriz de transformação de paradigmas.
+- **v0.4.0 — Módulo Opt-In de Segurança & Resiliência Integrado**
+  - `core/engine/security.md`: Os 5 Fundamentos anti-vibe coding (Race Condition, Idempotência, Zero-Trust, Separação de Responsabilidades, Testes de Integração Concorrentes) + Prompts de remediação direta no banco.
+  - `templates/SECURITY_AUDIT_TEMPLATE.md`: Relatório de auditoria opt-in.
+  - Motores destilados anteriores (`evidence.md`, `roles.md`, `synthesis.md`, `soul.md`) operacionais e testados.
   - `core/engine/soul.md`: Extração de essência e descarte de débito técnico.
   - Templates operacionais completos criados em `templates/`.
   - Scripts de automação integrados aos novos motores.

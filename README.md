@@ -33,7 +33,8 @@ Reversal Projects/
 │       ├── evidence.md         # Evidence Ledger, Unknowns Tracker & Parity Harness (REA)
 │       ├── roles.md            # 6 Posturas cognitivas para agentes de IA (Reversa)
 │       ├── synthesis.md        # Estratégias de reconstrução (Clean-Room, Strangler Fig, Bridge, Port)
-│       └── soul.md             # Soul Document: essência irredutível e descarte de débito
+│       ├── soul.md             # Soul Document: essência irredutível e descarte de débito
+│       └── security.md         # [OPT-IN] Os 5 Fundamentos de Resiliência, Concorrência e Zero-Trust
 │
 ├── profiles/                   # Perfis Especializados por Tipo de Produto
 │   ├── legacy-system/          # VB.NET, Delphi, C/C++ Win32 (+Desobfuscação, +Data Mapping)
@@ -48,7 +49,8 @@ Reversal Projects/
 │   ├── PARITY_SPEC_TEMPLATE.md # Casos de teste de conformidade de saída
 │   ├── RETRO_ADR_TEMPLATE.md   # Registro de decisões arquiteturais históricas
 │   ├── SDD_SPEC_TEMPLATE.md    # Especificações executáveis para criação de novo código
-│   └── SOUL_TEMPLATE.md        # Documento da alma do produto
+│   ├── SOUL_TEMPLATE.md        # Documento da alma do produto
+│   └── SECURITY_AUDIT_TEMPLATE.md # [OPT-IN] Relatório de auditoria de concorrência e resiliência
 │
 ├── scripts/                    # Utilitários PowerShell para Automação Enxuta
 │   ├── New-REProject.ps1       # Inicializa projeto *_decompiled com estrutura e templates

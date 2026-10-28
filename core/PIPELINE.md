@@ -97,6 +97,7 @@ TRIAGEM   →   EXTRAÇÃO    →   INTERPRETAÇÃO   →  ESTRUTURAÇÃO  →  
 - [ ] Resolver ou documentar formalmente qualquer desvio intencional de comportamento
 - [ ] Promover todos os itens elegíveis de 🟡 para 🟢
 - [ ] Validar compatibilidade de I/O (ex: saves gerados pelo novo produto abrem no legado e vice-versa)
+- [ ] *(Opcional / Opt-In)* Executar auditoria de concorrência, idempotência e zero-trust (`core/engine/security.md`)
 - [ ] Atualizar `HANDOFF.md` com estado final (ex: *DECOMPILATION CLOSED - RECONSTRUCTION READY*)
 - [ ] Decisão final: Novo produto liberado / Port concluído / Arquivamento
 
