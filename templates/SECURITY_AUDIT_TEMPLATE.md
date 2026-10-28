@@ -47,5 +47,13 @@
 
 ---
 
-## 5. Parecer Final e Próximos Passos
+## 5. Avaliação da Tríade Harmônica (Impacto na Usabilidade, Diversão e Performance)
+
+- [ ] **Jogos / Simulação:** O *game feel*, frame rate (60 FPS+), resposta de input e timing de física continuam idênticos? Nenhum I/O síncrono no game loop?
+- [ ] **Aplicativos:** A UI permanece 100% responsiva (Zero ANR)? Operações de rede e banco ocorrem de forma assíncrona/otimista?
+- [ ] **Sistemas Legados:** A integridade matemática e cálculos históricos foram preservados sem desvios? Locks não travam outros usuários?
+
+---
+
+## 6. Parecer Final e Próximos Passos
 {Conclusão resumida do auditor}

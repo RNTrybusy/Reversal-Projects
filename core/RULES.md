@@ -71,3 +71,11 @@ Toda afirmação sobre o sistema deve utilizar:
 
 ## 9. Rastreamento Contínuo de Estado (`state.json`)
 Cada projeto mantém na raiz o arquivo `state.json` atualizado via script `Update-REState.ps1` a cada transição de fase ou alteração relevante de cobertura.
+
+---
+
+## 10. A Tríade Harmônica (Segurança, Estabilidade e Usabilidade/Diversão)
+- **Princípio:** A segurança e resiliência devem atuar por baixo do capô sem nunca destruir a usabilidade, a performance ou a diversão original do software.
+- **Jogos:** Preservar rigorosamente o *game feel*, frame rate (60 FPS+), física e tempo de resposta de input. Operações de segurança, integridade e saves atômicos devem ocorrer de forma assíncrona/background sem bloquear o game loop.
+- **Aplicativos:** Preservar a fluidez de execução (Zero ANR). Validações de rede/token devem ser otimistas e assíncronas com tratamento elegante de erros.
+- **Legados:** Preservar as regras de negócio e precisão de cálculos acumulados, eliminando vulnerabilidades estruturais (ex: injeção de SQL e race conditions) por meio de transações atômicas nativas no banco de dados.
