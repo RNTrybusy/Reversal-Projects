@@ -1,104 +1,83 @@
-# Perfil: Game
+# Perfil: Game (Jogos & Emulação)
 
-> Jogos em qualquer plataforma: ROMs (SNES, GBA, NES), APKs de jogo Android,
-> J2ME, PC nativo, engines proprietárias. Ênfase em engine de jogo, assets,
-> formato de save, physics/simulation, e RNG.
+> **Foco:** Jogos em qualquer plataforma: ROMs de console (SNES, GBA, NES, Mega Drive), APKs Android de jogos (NDK C++, Java, Unity/Unreal empacotados), J2ME, PC clássico (DOS, Win32) e engines proprietárias.
+> **Ênfase:** Extração de assets, dissecação do game loop, fórmulas de simulação/física, geradores de aleatoriedade (RNG), formatos de save e testes de paridade bit-exact.
 
 ---
 
-## Quando usar
-- Software cujo propósito principal é entretenimento interativo
-- Presença de engine de jogo (proprietária ou conhecida)
-- Assets gráficos/sonoros significativos
-- Mecânicas de simulação, física ou aleatoriedade
+## 1. Quando Usar
+- Software cujo propósito central é entretenimento interativo ou simulação gráfica/esportiva.
+- Presença de engine de jogo (proprietária ou conhecida: LibGDX, Cocos2d, Godot, Unity).
+- Lógica de simulação de alta complexidade matemática (ex: match engine de futebol, física 2D/3D, curvas de dano).
+- Necessidade de portar o jogo para plataformas modernas (PC, Web, Mobile) preservando a jogabilidade idêntica (*game feel*).
 
-## Ferramentas típicas
-| Ferramenta | Uso |
-|-----------|-----|
-| Ghidra | ROMs, binários nativos, libs .so |
-| JADX | APKs Android (Java/Kotlin) |
-| Tile Molester / YY-CHR | Gráficos de ROM (tiles/sprites) |
-| VGMTrans / foobar2000 | Áudio de jogo |
-| Hex editors | Formato de save, tabelas de dados |
-| Python scripts | Réplica de RNG, simulação, validação |
-| Emuladores com debug | SNES9x debugger, mGBA, etc. |
+---
 
-## Fases extras (além do pipeline core)
+## 2. Ferramentas Típicas de Extração
+| Ferramenta | Uso Primário |
+|---|---|
+| **Ghidra / Hopper / IDA** | Binários nativos, ROMs (65816, ARM, MIPS) e bibliotecas `.so` |
+| **JADX / apktool** | APKs Android (camada Java, JNI wrappers, manifestos) |
+| **AssetStudio / Il2CppDumper** | Jogos Unity (extração de assets e restauração de símbolos Il2Cpp) |
+| **Tile Molester / YY-CHR** | Visualização e extração de gráficos de ROMs clássicas |
+| **VGMTrans / foobar2000** | Ripping e conversão de trilhas sonoras e efeitos de áudio de jogos |
+| **Python / Jupyter** | Prototipação e teste de paridade de algoritmos de RNG e física |
+| **Emuladores com Debugger** | Mesen, SNES9x Debugger, mGBA, PCSX-Redux |
 
-### Fase 1.5 — Extração de Assets (`asset-extraction`)
-- [ ] Sprites / tilesets / texturas
-- [ ] Música / efeitos sonoros (formato + player)
-- [ ] Fontes e elementos de UI
-- [ ] Tabelas de dados (jogadores, itens, mapas, etc.)
-- [ ] Localização / strings de texto (encoding!)
+---
 
-### Fase 2.5 — Engine Analysis (`engine-analysis`)
-A parte mais crítica e única de jogos:
-- [ ] **Loop de jogo** — identificar game loop principal
-- [ ] **Rendering** — pipeline gráfico (2D tiles, GLES, sprites)
-- [ ] **Physics/Simulation** — motor de física ou simulação
-- [ ] **RNG** — algoritmo de aleatoriedade (LCG, Mersenne, etc.)
-- [ ] **Save system** — formato, criptografia, checksum
-- [ ] **Input** — mapeamento de controles/touch
-- [ ] **AI** — comportamento de NPCs/oponentes
-- [ ] **Audio engine** — sistema de som (mixer, canais, formatos)
+## 3. Sub-Fases Especializadas (Extensão do Pipeline Core)
 
-### Fase 2.7 — Data Tables (`data-tables`)
-Jogos são data-driven; tabelas merecem fase própria:
-- [ ] Tabelas de jogadores/personagens
-- [ ] Tabelas de itens/equipamentos
-- [ ] Tabelas de mapas/níveis
-- [ ] Balanceamento (curvas de XP, dano, etc.)
-- [ ] Probabilidades (drop rates, encounter rates)
+```
+Fase 1 (Extração) ──> [Fase 1.5: Assets & Dados Brutos]
+                                │
+Fase 2 (Interpretação) ──> [Fase 2.5: Game Loop & Física] ──> [Fase 2.7: Tabelas & RNG]
+```
 
-## Checklist de completude (além do universal)
-- [ ] RNG replicado e validado com script
-- [ ] Formato de save completamente documentado
-- [ ] Assets extraídos em formatos padrão (PNG, WAV, etc.)
-- [ ] Engine loop documentado com diagrama
-- [ ] Tabelas de dados extraídas em formato estruturado (CSV/JSON)
-- [ ] Mecânicas de simulação documentadas com fórmulas
+### Fase 1.5 — Extração de Assets & Encodings (`asset-extraction`)
+- [ ] Atuar como `ARCHAEOLOGIST`: extrair texturas, spritesheets, fontes e paletas de cores.
+- [ ] Mapear arquivos de áudio (formato de som: PCM, MIDI, mod tracker, OGG, WAV).
+- [ ] Mapear tabelas de texto e codificações especiais (SJIS, ASCII customizado, matriz de caracteres de ROM).
+- [ ] Inventariar formatos empacotados proprietários (`.pak`, `.dat`, `.bin`, `.arc`).
 
-## Artefatos específicos
-| Artefato | Descrição |
-|----------|-----------|
-| `engine_overview.md` | Arquitetura da engine de jogo |
-| `save_format.md` | Formato de save byte-a-byte |
-| `rng_analysis.md` | Algoritmo RNG + script de réplica |
-| `data_tables/` | Pasta com tabelas extraídas (CSV/JSON) |
-| `asset_inventory.md` | Inventário de assets com formatos |
-| `simulation.md` | Motor de simulação/match/physics |
-| `encoding.md` | Tabela de caracteres / encoding de texto |
+### Fase 2.5 — Dissecação do Game Loop & Física (`engine-analysis`)
+- [ ] Atuar como `ARCHAEOLOGIST` e `DETECTIVE`: isolar o loop de atualização (`update()`) e desenho (`render()`).
+- [ ] Identificar taxa de quadros e passo de física (tempo fixo vs delta time).
+- [ ] Mapear rotinas de colisão e resolução de forças (fixed-point math ou ponto flutuante).
+- [ ] Registrar assinaturas e rotinas no `evidence_ledger.md`.
 
-## Peculiaridades de jogos por plataforma
+### Fase 2.7 — Fórmulas de Simulação, RNG e Saves (`data-tables-rng`)
+- [ ] **RNG Engine:** Identificar o algoritmo de geração de números pseudo-aleatórios (LCG, Xorshift, Mersenne Twister). *Obrigatório replicar em script Python para paridade bit-exact.*
+- [ ] **Formato de Save:** Mapear a struct byte-a-byte, checksums (CRC32, MD5, soma simples) e encriptação.
+- [ ] **Tabelas de Dados:** Extrair listas de entidades (jogadores, atributos, inimigos, itens) para CSV ou JSON limpo.
 
-### ROMs (SNES, GBA, NES, Mega Drive)
-- Endereçamento: LoROM/HiROM/mapeamento de banco
-- Fixed-point math (sem FPU!)
-- DMA e modos gráficos do hardware
-- Tabela de interrupções / vetores
+---
 
-### Android NDK
-- Libs nativas `.so` (ARM Thumb-2 frequente)
-- JNI bridges entre Java e nativo
-- OpenGL ES para rendering
-- Assets em `assets/` dentro do APK
+## 4. Reconstrução e Portabilidade (`Software Recreated/`)
 
-### J2ME
-- ProGuard obfuscation padrão
-- Canvas-based rendering
-- Fixed-point math (24.8, 16.16)
-- RecordStore para saves
-- Limitações de memória severas
+Consulte `core/engine/synthesis.md` para guiar a reconstrução:
 
-### PC Nativo (DOS, Win16, Win32)
-- DOS: modo real, interrupções, VGA/SVGA
-- Formatos de áudio: MIDI, MOD, S3M
-- Paletas de cores indexadas
+1. **Port para Engines Modernas (Godot 4, Raylib, MonoGame, Flutter):**
+   - O core de simulação/física deve ser reimplementado como biblioteca pura (sem dependência de rendering).
+   - A engine moderna atua apenas como camada de visualização e entrada.
+2. **Parity Harness Obrigatório:**
+   - **RNG:** Testar 10.000 chamadas consecutivas com a mesma seed entre o legado e o novo código.
+   - **Saves:** Salvar no novo motor e carregar com sucesso no jogo original (e vice-versa).
+   - **Simulação:** Garantir que as mesmas condições de partida/partida gerem o mesmo placar/resultado.
 
-## Referências de projetos existentes
-- `toloveru_puzzlegame_decompiled/` — Android NDK, ARM, GLES2
-- `rfm2013_decompiled/` — J2ME, fixed-point physics, ProGuard
-- `fmm20_decompiled/` — Android nativo, engine de match complexa
-- `pm97_decompiled/` — SNES ROM, 65816 assembly
-- `brasfoot22-23_decompiled/` — PC, simulação esportiva completa
+---
+
+## 5. Artefatos Obrigatórios do Perfil
+
+| Artefato | Localização | Função |
+|---|---|---|
+| Handoff | `HANDOFF.md` | Resumo de arquitetura e progresso (~40 linhas) |
+| Alma & Mecânicas | `soul.md` | O "game feel", regras inegociáveis e descartes |
+| Livro de Evidências | `evidence_ledger.md` | Offsets de funções de simulação, structs e UNKs |
+| Engine Overview | `docs/engine_overview.md` | Arquitetura do game loop e pipeline gráfico |
+| Formato de Save | `docs/save_format.md` | Mapeamento byte-a-byte com validação de checksum |
+| Análise de RNG | `docs/rng_analysis.md` | Algoritmo formal + script de replicação |
+| Fórmulas de Física | `docs/simulation.md` | Cálculos de colisão, atributos e inteligência artificial |
+| Tabelas Estruturadas | `resources/data_tables/` | CSVS/JSONs com dados limpos extraídos |
+| Specs de Implementação | `docs/specs/sdd_*.md` | Especificações para recriar o jogo em engine moderna |
+| Suíte de Paridade | `docs/specs/parity_*.md` | Casos de teste automatizados de paridade bit/behavior |

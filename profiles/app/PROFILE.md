@@ -1,70 +1,79 @@
-# Perfil: App (Aplicativo)
+# Perfil: App (Aplicativos Mobile, Desktop & Web)
 
-> Aplicativos de uso geral: Android, desktop, web, Electron. Não são jogos
-> nem sistemas legados complexos. Ênfase em UI flows, APIs, data layer,
-> e remoção de features indesejadas (ads, licenciamento).
+> **Foco:** Aplicativos de uso geral: Android (APKs padrão com Java/Kotlin e NDK utilitário), Desktop moderno (Electron, Tauri, .NET WPF/MAUI, Qt) e PWAs/Webapps empacotados.
+> **Ênfase:** Mapeamento de contratos de API REST/GraphQL, fluxo de navegação e telas, camada de persistência local, pontes de comunicação IPC e cirurgia de features (remoção segura de telemetria, ads e travas de licença).
 
 ---
 
-## Quando usar
-- Aplicativo mobile (Android APK) sem engine de jogo
-- Aplicativo desktop com UI convencional
-- Apps Electron / web empacotados
-- Objetivo: entender, modificar, remover features, ou portar
+## 1. Quando Usar
+- Aplicativos móveis ou desktop sem motor de jogo ou arquitetura monolítica obsoleta.
+- Necessidade de entender como o frontend se comunica com serviços de nuvem privados.
+- Diagnóstico de segurança, auditoria de privacidade ou remoção de componentes indesejados (ad networks, trackers invasivos).
+- Planejamento de port multiplataforma ou recriação de cliente alternativo livre (open source).
 
-## Ferramentas típicas
-| Ferramenta | Uso |
-|-----------|-----|
-| JADX | APKs Android (Java/Kotlin) |
-| apktool | Recursos e manifesto Android |
-| Ghidra | Libs nativas dentro de APKs |
-| mitmproxy / Charles | Interceptação de APIs HTTP |
-| Frida | Instrumentação dinâmica |
-| Chrome DevTools | Apps web/Electron |
-| ILSpy | Apps .NET desktop |
+---
 
-## Fases extras (além do pipeline core)
+## 2. Ferramentas Típicas de Extração
+| Ferramenta | Uso Primário |
+|---|---|
+| **JADX-GUI / apktool / Uber-APK-Signer** | Decompilação, edição de recursos e reassinatura de APKs Android |
+| **mitmproxy / Charles / Burp Suite** | Interceptação de tráfego HTTPS, quebra de SSL Pinning e gravação HAR |
+| **Frida / Objection** | Instrumentação dinâmica em tempo de execução e hook de métodos |
+| **Chrome DevTools / asar tool** | Desempacotamento e inspeção de código-fonte de apps Electron |
+| **Ghidra** | Análise de bibliotecas nativas de ponte (JNI em Android, node addons no Electron) |
+| **Postman / Bruno / curl** | Reprodução e validação de contratos de API |
 
-### Fase 1.5 — API Mapping (`api-mapping`)
-Apps modernos são frontends para APIs:
-- [ ] Endpoints HTTP/HTTPS identificados
-- [ ] Payload request/response documentado
-- [ ] Autenticação (OAuth, JWT, API keys)
-- [ ] WebSockets ou protocolos real-time
-- [ ] Rate limits e headers especiais
+---
 
-### Fase 2.5 — UI Flow Analysis (`ui-flow`)
-- [ ] Mapa de telas / activities / fragments
-- [ ] Navegação entre telas (fluxograma)
-- [ ] Componentes reutilizáveis identificados
-- [ ] Deep links e intents
-- [ ] Acessibilidade e localização
+## 3. Sub-Fases Especializadas (Extensão do Pipeline Core)
 
-### Fase 2.7 — Feature Surgery (`feature-surgery`)
-Quando o objetivo é remover ou modificar features específicas:
-- [ ] Ads: identificar SDKs, classes, layouts
-- [ ] Licenciamento: verificação de licença, trial logic
-- [ ] Analytics/tracking: SDKs de telemetria
-- [ ] Paywall: lógica de compra in-app
-- [ ] Plano de remoção cirúrgica (minimal patch)
+```
+Fase 1 (Extração) ──> [Fase 1.5: Mapeamento de APIs & Redes]
+                                │
+Fase 2 (Interpretação) ──> [Fase 2.5: Fluxos de UI & IPC] ──> [Fase 2.7: Cirurgia de Features]
+```
 
-## Checklist de completude (além do universal)
-- [ ] Manifesto Android analisado (permissions, components)
-- [ ] APIs documentadas com exemplos de request/response
-- [ ] Mapa de navegação de UI completo
-- [ ] Data layer (SharedPreferences, SQLite, Room, etc.)
-- [ ] SDKs de terceiros identificados e documentados
-- [ ] Plano de modificação/remoção de features se aplicável
+### Fase 1.5 — Mapeamento de Redes & Contratos de Fronteira (`api-mapping`)
+- [ ] Atuar como `SCOUT` e `ARCHAEOLOGIST`: extrair todos os endpoints HTTP/HTTPS, WebSockets e URLs de serviço.
+- [ ] Mapear esquemas de autenticação (OAuth2, JWT, tokens HMAC, certificados customizados).
+- [ ] Gravar payloads de requisição e resposta de exemplo em `docs/api_endpoints.md`.
+- [ ] Registrar no `evidence_ledger.md` qualquer lógica de assinatura ou criptografia de payload.
 
-## Artefatos específicos
-| Artefato | Descrição |
-|----------|-----------|
-| `api_endpoints.md` | Catálogo de endpoints com payloads |
-| `ui_flow.md` | Mapa de navegação e telas |
-| `data_layer.md` | Camada de dados (DB, prefs, cache) |
-| `third_party_sdks.md` | SDKs integrados e seus efeitos |
-| `feature_surgery.md` | Plano de remoção/modificação cirúrgica |
-| `manifest_analysis.md` | Análise do AndroidManifest |
+### Fase 2.5 — Navegação de Telas e Comunicação IPC (`ui-flow-ipc`)
+- [ ] Mapear todas as telas/atividades/páginas e criar fluxograma de navegação (Mermaid).
+- [ ] Documentar canais de comunicação entre processos (Android Intents, Electron `ipcRenderer`/`ipcMain`, WebViews).
+- [ ] Identificar a camada de persistência de dados local (Room/SQLite, SharedPreferences, LocalStorage, IndexedDB).
 
-## Referências de projetos existentes
-- `purl_player_decompiled/` — Android media player, ads, licenciamento
+### Fase 2.7 — Cirurgia de Features & Auditoria (`feature-surgery`)
+Quando a meta envolve auditar ou modificar o aplicativo:
+- [ ] **Rastreamento de Bloqueios:** Identificar SDKs de monetização (Google AdMob, Unity Ads, etc.), trackers (Firebase, Adjust) e verificação de licença.
+- [ ] **Planejamento de Patch Mínimo:** Especificar as alterações pontuais em bytecode (Smali ou JS) necessárias para desabilitar o código sem gerar crashes colaterais.
+- [ ] **Parity & Integrity Check:** Garantir que o aplicativo modificado continue operando normalmente nas rotinas legítimas.
+
+---
+
+## 4. Reconstrução ou Criação de Novo Cliente (`Software Recreated/`)
+
+Consulte `core/engine/synthesis.md` para orientar o desenvolvimento:
+
+1. **Cliente Alternativo Moderno (Flutter, React Native, Next.js, Tauri):**
+   - Implementar os contratos de API documentados em `docs/api_endpoints.md`.
+   - Reutilizar fluxos de UX documentados sem carregar o débito técnico de SDKs de terceiros.
+2. **Harness de Conformidade:**
+   - Testar o cliente novo contra os mesmos servidores ou endpoints mockados com 100% de paridade de headers e formato de dados.
+
+---
+
+## 5. Artefatos Obrigatórios do Perfil
+
+| Artefato | Localização | Função |
+|---|---|---|
+| Handoff | `HANDOFF.md` | Resumo de arquitetura e progresso (~40 linhas) |
+| Alma & Proposta | `soul.md` | Proposta de valor central, invariantes e descartes |
+| Livro de Evidências | `evidence_ledger.md` | Endpoints, assinaturas, hooks de Frida e UNKs |
+| Catálogo de APIs | `docs/api_endpoints.md` | Especificação completa de requests/responses |
+| Fluxo de Navegação | `docs/ui_flow.md` | Diagramas Mermaid de navegação e estados de tela |
+| Camada de Dados | `docs/data_layer.md` | Estrutura de banco local e preferências |
+| Cirurgia de Features | `docs/feature_surgery.md` | Registro de patches, classes de ads/licenças isoladas |
+| Specs de Implementação | `docs/specs/sdd_*.md` | Especificações para recriar cliente novo em `Software Recreated/` |
+| Testes de Paridade | `docs/specs/parity_*.md` | Validação de payloads e transições de tela |

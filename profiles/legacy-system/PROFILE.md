@@ -1,67 +1,73 @@
 # Perfil: Legacy System
 
-> Sistemas legados desktop/server: VB.NET, Delphi, C/C++ Win32, .NET antigo,
-> Java SE, COBOL, etc. Ênfase em desobfuscação, schemas de banco de dados,
-> e caminhos de migração para stacks modernas.
+> **Foco:** Sistemas legados desktop/server: VB.NET, Delphi, C/C++ Win32, .NET Framework antigo (2.0-4.x), Java SE, COBOL, etc.
+> **Ênfase:** Desobfuscação, isolamento de regras enterradas em UI (code-behind), mapeamento de bancos de dados/arquivos proprietários, e modernização orientada a especificações limpas.
 
 ---
 
-## Quando usar
-- Software desktop/server com código-fonte indisponível ou perdido
-- Necessidade de entender para **manter, migrar ou portar**
-- Presença de obfuscação (.NET ConfuserEx, Themida, etc.)
-- Bancos de dados embutidos ou schemas complexos
+## 1. Quando Usar
+- Software desktop/servidor com código-fonte indisponível, incompleto ou degradado.
+- Necessidade de entender para **manter, migrar ou criar um novo produto** em stack moderna.
+- Presença de obfuscação pesada (.NET ConfuserEx, Themida, VMProtect, etc.).
+- Bancos de dados embutidos (Access, SQLite, Paradox, Firebird) ou esquemas relacionais complexos sem documentação.
 
-## Ferramentas típicas
-| Ferramenta | Uso |
-|-----------|-----|
-| ILSpy / dnSpy | Decompilação .NET |
-| Ghidra | Binários nativos (C/C++, Delphi) |
-| de4dot | Desobfuscação .NET |
-| DB Browser SQLite | Bancos embutidos |
-| x64dbg / OllyDbg | Debug dinâmico Win32 |
-| Wireshark | Captura de protocolos de rede |
+---
 
-## Fases extras (além do pipeline core)
+## 2. Ferramentas Típicas de Extração
+| Ferramenta | Uso Primário |
+|---|---|
+| **ILSpy / dnSpy / ICSharpCode** | Decompilação .NET para C# legível |
+| **Ghidra / IDA** | Binários nativos Win32 (Delphi VCL, C++, C puro) |
+| **de4dot / Net-Reactor-Slayer** | Desobfuscação automatizada de assemblies .NET |
+| **DB Browser SQLite / DBeaver** | Análise e exportação de schemas de banco embutidos |
+| **x64dbg / Process Hacker** | Depuração dinâmica em tempo de execução e inspeção de memória |
+| **Wireshark / Fiddler** | Mapeamento de protocolos de comunicação de rede e RPC |
 
-### Fase 1.5 — Desobfuscação (`deobfuscation`)
-Entre Extração e Interpretação, quando obfuscação é detectada:
-- [ ] Identificar obfuscador e versão
-- [ ] Aplicar ferramentas de desobfuscação (de4dot, etc.)
-- [ ] Comparar antes/depois — verificar integridade
-- [ ] Documentar o que permanece ofuscado (🔴)
+---
 
-### Fase 2.5 — Mapeamento de Dados (`data-mapping`)
-Ênfase especial no modelo de dados:
-- [ ] Schema de todos os bancos de dados
-- [ ] Formato de arquivos de configuração
-- [ ] Formato de arquivos de save/state
-- [ ] Mapeamento de registry entries (Windows)
-- [ ] Protocolo de comunicação (se cliente-servidor)
+## 3. Sub-Fases Especializadas (Extensão do Pipeline Core)
 
-## Checklist de completude (além do universal)
-- [ ] Todas as telas/formulários documentados com screenshots
-- [ ] Schema de DB completo com tipos e relações
-- [ ] Strings decriptadas/desobfuscadas
-- [ ] Caminhos de migração avaliados (port vs patch vs rewrite)
-- [ ] Dependências de runtime documentadas (.NET version, COM objects, etc.)
+```
+Fase 1 (Extração) ──> [Fase 1.5: Desobfuscação] ──> Fase 2 (Interpretação) ──> [Fase 2.5: Mapeamento de Dados]
+```
 
-## Artefatos específicos
-| Artefato | Descrição |
-|----------|-----------|
-| `db_schema.md` | Schema completo de bancos de dados |
-| `ui_screens.md` | Inventário de telas com função de cada uma |
-| `obfuscation_report.md` | Análise do obfuscador e resultado da desobfuscação |
-| `migration_paths.md` | Avaliação de opções de modernização |
-| `runtime_deps.md` | Dependências de runtime e versões |
+### Fase 1.5 — Desobfuscação & Normalização (`deobfuscation`)
+- [ ] Atuar como `ARCHAEOLOGIST`: identificar o obfuscador e versão exata.
+- [ ] Executar pipeline de limpeza (desempacotar strings criptografadas, restaurar nomes de métodos conhecidos).
+- [ ] Registrar no `evidence_ledger.md` tabelas de tradução de símbolos cruciais.
+- [ ] Validar que o assembly desobfuscado continua funcional (ou comparável byte-a-byte no oráculo).
 
-## Decisão de saída
-Ao final da Fase 4, decidir entre:
-1. **Manutenção** — patching binário (IL patch, hex edit)
-2. **Migração** — rewrite em stack moderna preservando lógica
-3. **Port** — reconstrução fiel em nova plataforma
-4. **Arquivo** — documentação completa, sem ação futura
+### Fase 2.5 — Mapeamento do Modelo de Dados & Fronteiras (`data-mapping`)
+- [ ] Atuar como `DETECTIVE`: separar a lógica de negócio do código de interface gráfica (desacoplar o *Code-Behind* do WinForms/VCL).
+- [ ] Documentar o schema completo de tabelas, campos, tipos e relacionamentos.
+- [ ] Identificar rotinas de persistência (queries SQL embutidas, triggers, stored procedures, serialização binária).
+- [ ] Mapear arquivos de configuração (`.ini`, `.xml`, registro do Windows `HKLM/HKCU`).
 
-## Referências de projetos existentes
-- `cm14_decompiled/` — VB.NET/ConfuserEx, modelo completo deste perfil
-- `amt_mp3player_decompiled/` — Delphi nativo, hardware-adjacent
+---
+
+## 4. Estratégia de Modernização e Síntese (`Software Recreated/`)
+
+Consulte `core/engine/synthesis.md` para selecionar o padrão de modernização:
+
+1. **Clean-Room via SDD (Recomendado):**
+   - Escrever especificações formais (`docs/specs/sdd_*.md`) de cada serviço de negócio.
+   - Implementar novo backend em C# .NET 9, Node.js, Go ou Rust com Clean Architecture.
+2. **Strangler Fig (Para Grandes Sistemas):**
+   - Substituir módulo a módulo, consumindo a mesma base de dados legada via novos repositórios desacoplados.
+3. **Binary Wrapper / Bridge:**
+   - Invocar DLLs nativas legadas temporariamente através de bindings modernos enquanto a UI e a API são refeitas.
+
+---
+
+## 5. Artefatos Obrigatórios do Perfil
+
+| Artefato | Localização | Função |
+|---|---|---|
+| Handoff | `HANDOFF.md` | Resumo executivo do legado (~40 linhas) |
+| Alma & Invariantes | `soul.md` | O valor central, regras inegociáveis e o que descartar |
+| Livro de Evidências | `evidence_ledger.md` | Offsets, métodos desobfuscados e UNKs |
+| Schema de Dados | `docs/db_schema.md` | DDL, dicionário de tipos e relacionamentos |
+| Inventário de UI | `docs/ui_screens.md` | Mapeamento de formulários e suas responsabilidades |
+| Decisões Históricas | `docs/adrs/ADR-*.md` | Registro de soluções de engenharia legadas |
+| Specs de Implementação | `docs/specs/sdd_*.md` | Contratos para o novo produto em `Software Recreated/` |
+| Testes de Paridade | `docs/specs/parity_*.md` | Casos de teste de conformidade de regras de negócio |
