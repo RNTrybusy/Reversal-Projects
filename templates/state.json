@@ -1,0 +1,15 @@
+{
+  "project": "",
+  "profile": "",
+  "phase": "triage",
+  "phase_progress": 0.0,
+  "phases_completed": [],
+  "last_checkpoint": "",
+  "confidence": {
+    "confirmed": 0,
+    "inferred": 0,
+    "gap": 0
+  },
+  "tools": [],
+  "notes": ""
+}
